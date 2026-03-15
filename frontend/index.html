@@ -19,20 +19,14 @@
         }
     </script>
     
-<script>
-  // Cambié la URL para que apunte a tu nueva ruta del backend
-  fetch('https://mi-backend-fzcf.onrender.com/saludo')
+    <script>
+    // Cambié la URL para que apunte a tu nueva ruta del backend
+    fetch('https://mi-backend-fzcf.onrender.com/saludo') // Cambia a tu URL real
     .then(response => response.text())
     .then(data => {
-      const elemento = document.getElementById('mensaje-servidor');
-      if(elemento) elemento.innerText = data;
-    })
-    .catch(err => {
-      console.error("Error:", err);
-      document.getElementById('mensaje-servidor').innerText = "Error al conectar con el servidor";
+        document.getElementById('mensaje-servidor').innerText = data;
     });
-</script>
+    </script>
 
 </body>
 </html>
-
