@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>Mi App en Container</title>
     <link rel="stylesheet" href="style.css">
+
 </head>
 <body>
     <h1>Hola Mundo Full Stack 🌟</h1>
@@ -17,5 +18,21 @@
                 "#" + Math.floor(Math.random()*16777215).toString(16);
         }
     </script>
+    
+<script>
+  // Cambié la URL para que apunte a tu nueva ruta del backend
+  fetch('https://mi-backend-fzcf.onrender.com/saludo')
+    .then(response => response.text())
+    .then(data => {
+      const elemento = document.getElementById('mensaje-servidor');
+      if(elemento) elemento.innerText = data;
+    })
+    .catch(err => {
+      console.error("Error:", err);
+      document.getElementById('mensaje-servidor').innerText = "Error al conectar con el servidor";
+    });
+</script>
+
 </body>
 </html>
+
