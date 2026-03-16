@@ -7,26 +7,44 @@
 
 </head>
 <body>
-    <h1>Hola Mundo Full Stack 🌟</h1>
-    <div id="mensaje-servidor">Esperando al backend...</div>
-    <button onclick="cambiarColor()">Cambiar Color</button>
-
-    <script>
-        // Función simple para cambiar el fondo
-        function cambiarColor() {
-            document.body.style.backgroundColor = 
-                "#" + Math.floor(Math.random()*16777215).toString(16);
-        }
-    </script>
+    <h1>¡Publica tu Saludo! 🌟</h1>
     
-    <script>
-    // Cambié la URL para que apunte a tu nueva ruta del backend
-    fetch('https://mi-backend-fzcf.onrender.com/saludo') // Cambia a tu URL real
-    .then(response => response.text())
-    .then(data => {
-        document.getElementById('mensaje-servidor').innerText = data;
-    });
-    </script>
+    <div class="form-container">
+        <input type="text" id="nuevo-saludo" placeholder="Escribe algo aquí...">
+        <button onclick="enviarSaludo()">Publicar en la Nube</button>
+    </div>
 
+    <div id="mensaje-servidor">Cargando saludos...</div>
+
+    <script>
+        const API_URL = 'https://mi-backend-fzcf.onrender.com';
+
+        // 1. FUNCIÓN PARA LEER (GET)
+        function cargarSaludo() {
+            fetch(`${API_URL}/saludo`)
+                .then(res => res.text())
+                .then(data => document.getElementById('mensaje-servidor').innerText = data);
+        }
+
+        // 2. FUNCIÓN PARA ENVIAR (POST)
+        function enviarSaludo() {
+            const texto = document.getElementById('nuevo-saludo').value;
+            
+            fetch(`${API_URL}/nuevo`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ texto: texto })
+            })
+            .then(res => res.text())
+            .then(data => {
+                alert(data);
+                document.getElementById('nuevo-saludo').value = ''; // Limpiar input
+                cargarSaludo(); // Recargar la lista
+            });
+        }
+
+        // Cargar al iniciar
+        cargarSaludo();
+    </script>
 </body>
 </html>

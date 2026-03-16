@@ -44,6 +44,24 @@ app.get('/saludo', async (req, res) => {
   }
 });
 
+
+// Ruta para recibir y guardar un nuevo saludo
+app.post('/nuevo', async (req, res) => {
+  try {
+    const nuevoTexto = req.body.texto;
+    
+    // Guardamos en MongoDB usando el modelo que ya definimos
+    const saludo = new Saludo({ texto: nuevoTexto });
+    await saludo.save();
+    
+    res.send('✅ Saludo guardado con éxito');
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('❌ Error al guardar');
+  }
+});
+
+
 // 4. Encendido
 app.listen(port, () => {
   console.log(`🚀 Servidor corriendo en el puerto ${port}`);
