@@ -19,12 +19,24 @@
     <script>
         const API_URL = 'https://mi-backend-fzcf.onrender.com';
 
-        async function cargarSaludos() {
+    async function cargarSaludos() {
+        try {
             const res = await fetch(`${API_URL}/saludos`);
-            const data = await res.json();
+            // CAMBIO AQUÍ: Usamos .json() porque el backend envía un array
+            const data = await res.json(); 
+            
             const lista = document.getElementById('lista-saludos');
-            lista.innerHTML = data.map(s => `<li class="bg-gray-50 p-2 border-b">${s.texto}</li>`).join('');
+            
+            // Mapeamos los datos para crear los elementos de la lista
+            lista.innerHTML = data.map(s => `
+                <li class="bg-gray-50 p-3 mb-2 border-l-4 border-blue-500 rounded shadow-sm text-gray-700">
+                    ${s.texto}
+                </li>
+            `).join('');
+        } catch (error) {
+            console.error("Error cargando saludos:", error);
         }
+    }
 
         async function enviarSaludo() {
             const texto = document.getElementById('nuevo-saludo').value;
