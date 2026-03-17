@@ -2,49 +2,42 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Mi App en Container</title>
-    <link rel="stylesheet" href="style.css">
-
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Mi App Full Stack</title>
 </head>
-<body>
-    <h1>¡Publica tu Saludo! 🌟</h1>
-    
-    <div class="form-container">
-        <input type="text" id="nuevo-saludo" placeholder="Escribe algo aquí...">
-        <button onclick="enviarSaludo()">Publicar en la Nube</button>
-    </div>
+<body class="bg-gray-100 p-8">
+    <div class="max-w-md mx-auto bg-white p-6 rounded-lg shadow-md">
+        <h1 class="text-2xl font-bold mb-4 text-blue-600">¡Libro de Visitas! 🌟</h1>
+        
+        <input type="text" id="nuevo-saludo" class="w-full border p-2 mb-2 rounded" placeholder="Escribe aquí...">
+        <button onclick="enviarSaludo()" class="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600">Publicar</button>
 
-    <div id="mensaje-servidor">Cargando saludos...</div>
+        <ul id="lista-saludos" class="mt-6 space-y-2">
+            </ul>
+    </div>
 
     <script>
         const API_URL = 'https://mi-backend-fzcf.onrender.com';
 
-        // 1. FUNCIÓN PARA LEER (GET)
-        function cargarSaludo() {
-            fetch(`${API_URL}/saludo`)
-                .then(res => res.text())
-                .then(data => document.getElementById('mensaje-servidor').innerText = data);
+        async function cargarSaludos() {
+            const res = await fetch(`${API_URL}/saludos`);
+            const data = await res.json();
+            const lista = document.getElementById('lista-saludos');
+            lista.innerHTML = data.map(s => `<li class="bg-gray-50 p-2 border-b">${s.texto}</li>`).join('');
         }
 
-        // 2. FUNCIÓN PARA ENVIAR (POST)
-        function enviarSaludo() {
+        async function enviarSaludo() {
             const texto = document.getElementById('nuevo-saludo').value;
-            
-            fetch(`${API_URL}/nuevo`, {
+            await fetch(`${API_URL}/nuevo`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ texto: texto })
-            })
-            .then(res => res.text())
-            .then(data => {
-                alert(data);
-                document.getElementById('nuevo-saludo').value = ''; // Limpiar input
-                cargarSaludo(); // Recargar la lista
+                body: JSON.stringify({ texto })
             });
+            document.getElementById('nuevo-saludo').value = '';
+            cargarSaludos();
         }
 
-        // Cargar al iniciar
-        cargarSaludo();
+        cargarSaludos();
     </script>
 </body>
 </html>

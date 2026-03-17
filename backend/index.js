@@ -35,12 +35,14 @@ app.get('/', (req, res) => {
   res.send('Servidor activo. Usa /saludo para ver los datos.');
 });
 
-app.get('/saludo', async (req, res) => {
+
+// Ruta para obtener TODOS los saludos
+app.get('/saludos', async (req, res) => {
   try {
-    const saludoDB = await Saludo.findOne();
-    res.send(saludoDB ? saludoDB.texto : "No hay saludos en la DB");
+    const lista = await Saludo.find().sort({ _id: -1 }); // Los más nuevos primero
+    res.json(lista); // Enviamos un array JSON
   } catch (error) {
-    res.status(500).send("Error en el servidor");
+    res.status(500).json({ error: "Error al obtener saludos" });
   }
 });
 
